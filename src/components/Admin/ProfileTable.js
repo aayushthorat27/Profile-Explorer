@@ -34,7 +34,7 @@ function ProfileTable({ profiles, onEditProfile, onDeleteProfile }) {
                 </td>
                 <td>{profile.jobTitle}</td>
                 <td>{profile.company}</td>
-                <td>{profile.address.city}, {profile.address.state}</td>
+                <td>{profile.address?.city || 'Unknown city'}, {profile.address?.state || 'Unknown State'}</td>
                 <td>{profile.email}</td>
                 <td className="action-buttons">
                   <button 
