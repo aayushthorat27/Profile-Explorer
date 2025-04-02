@@ -102,7 +102,7 @@ const sampleProfiles = [
   }
 ];
 
-console.log(sampleProfiles.length);
+// console.log(sampleProfiles.length);
 
 function App() {
   const [profiles, setProfiles] = useState(sampleProfiles);
@@ -121,6 +121,21 @@ function App() {
       setMapZoom(12);
     }
   };
+
+  const handleUpdateProfiles = (updatedProfiles) => {
+    const validatedProfiles = updatedProfiles.map(profile => ({
+      ...profile,
+      address: profile.address || {
+        street: '',
+        city: 'Unknown City',
+        state: 'Unknown State',
+        zipCode: '',
+        country: '',
+        coordinates: { lat: 0, lng: 0 },
+      },
+    }));
+    setProfiles(validatedProfiles);
+  }
 
   // Load profiles (would fetch from API in a real application)
   useEffect(() => {
@@ -158,7 +173,7 @@ function App() {
         </div>
       </main>
         <Routes>
-          <Route path='/admin' element={<AdminPage />} />
+          <Route path='/admin' element={<AdminPage profiles={profiles} onUpdateProfiles={handleUpdateProfiles}/>} />
         </Routes>
       </Router>
     </div>
