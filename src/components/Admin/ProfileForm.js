@@ -90,38 +90,58 @@ function ProfileForm({ profile, onSave, onCancel }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (validateForm()) {
+    // if (validateForm()) 
       onSave(formData);
-    }
+    // }
   };
 
   // Geocode address using Google Maps API (simulated for this example)
-  const handleGeocode = () => {
+  const handleGeocode = async () => {
     // In a real implementation, this would call the Google Geocoding API
+    const { street, city, state, zipCode, country } = formData.address;
+    const address = `${street}, ${city}, ${state}, ${zipCode}, ${country}`;
+    const geocoder = new window.google.maps.Geocoder();
     // For this example, we'll just set some hardcoded coordinates based on city
-    const cityCoordinates = {
-      'New York': { lat: 40.7128, lng: -74.0060 },
-      'San Francisco': { lat: 37.7749, lng: -122.4194 },
-      'Chicago': { lat: 41.8781, lng: -87.6298 },
-      'Seattle': { lat: 47.6062, lng: -122.3321 },
-      'Austin': { lat: 30.2672, lng: -97.7431 },
-      // Default coordinates if city not found
-      'default': { lat: 39.8283, lng: -98.5795 }
-    };
+//     const cityCoordinates = {
+//       'New York': { lat: 40.7128, lng: -74.0060 },
+//       'San Francisco': { lat: 37.7749, lng: -122.4194 },
+//       'Chicago': { lat: 41.8781, lng: -87.6298 },
+//       'Seattle': { lat: 47.6062, lng: -122.3321 },
+//       'Austin': { lat: 30.2672, lng: -97.7431 },
+//       // Default coordinates if city not found
+//       'default': { lat: 39.8283, lng: -98.5795 }
+//     };
     
-    const city = formData.address.city.trim();
-    const coordinates = cityCoordinates[city] || cityCoordinates.default;
+//     // const city = formData.address.city.trim();
+//     const coordinates = cityCoordinates[city] || cityCoordinates.default;
     
-    setFormData({
-      ...formData,
-      address: {
-        ...formData.address,
-        coordinates
-      }
-    });
+//     setFormData({
+//       ...formData,
+//       address: {
+//         ...formData.address,
+//         coordinates
+//       }
+//     });
     
-    alert(`Coordinates set: Lat ${coordinates.lat}, Lng ${coordinates.lng}`);
-  };
+//     alert(`Coordinates set: Lat ${coordinates.lat}, Lng ${coordinates.lng}`);
+//   };
+
+geocoder.geocode({ address }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const { lat, lng } = results[0].geometry.location;
+      setFormData((prev) => ({
+        ...prev,
+        address: {
+          ...prev.address,
+          coordinates: { lat: lat(), lng: lng() },
+        },
+      }));
+    } else {
+      console.error('Geocoding failed:', status);
+      alert('Failed to fetch coordinates. Please check the address.');
+    }
+  });
+};
 
   return (
     <div className="profile-form">
@@ -333,7 +353,7 @@ function ProfileForm({ profile, onSave, onCancel }) {
           <button type="button" className="cancel-button" onClick={onCancel}>
             Cancel
           </button>
-          <button type="submit" className="save-button">
+          <button type="submit" className="save-button" onClick={onSave}>
             Save Profile
           </button>
         </div>
