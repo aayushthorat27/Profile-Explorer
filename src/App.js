@@ -6,6 +6,7 @@ import MapView from './components/MapView';
 import ProfileDetail from './components/ProfileDetail';
 import AdminPage from './components/Admin/AdminPage';
 import Header from './components/Header';
+import { Analytics } from "@vercel/analytics/react";
 import './App.css';
 
 // Sample profile data (in a real app, this would come from an API)
@@ -148,6 +149,7 @@ function App() {
 
   return (
     <div className="app">
+      <Analytics />
       <Router>
         {/* <Routes> */}
       <Header />
