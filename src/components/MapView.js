@@ -4,13 +4,14 @@ function MapView({ profiles, selectedProfileId, center, zoom, onSelectProfile })
   const mapRef = useRef(null);
   const googleMapRef = useRef(null);
   const markersRef = useRef([]);
-
+  
   // Initialize the map
   useEffect(() => {
     // Load Google Maps API script if not already loaded
     if (!window.google) {
+      const apiKey = process.env.REACT_APP_API_KEY;
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = initMap;
