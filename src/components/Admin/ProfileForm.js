@@ -83,6 +83,7 @@ function ProfileForm({ profile, onSave, onCancel }) {
     if (!formData.address.country.trim()) newErrors['address.country'] = 'Country is required';
     
     setErrors(newErrors);
+    console.log('Form errors:', newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
@@ -90,9 +91,10 @@ function ProfileForm({ profile, onSave, onCancel }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // if (validateForm()) 
+    if (validateForm()) {
+        console.log('Form data:', formData);
       onSave(formData);
-    // }
+    }
   };
 
   // Geocode address using Google Maps API (simulated for this example)
@@ -353,7 +355,8 @@ geocoder.geocode({ address }, (results, status) => {
           <button type="button" className="cancel-button" onClick={onCancel}>
             Cancel
           </button>
-          <button type="submit" className="save-button" onClick={onSave}>
+          {/* <button type="submit" className="save-button" onClick={onSave}> */}
+          <button type="submit" className="save-button" >
             Save Profile
           </button>
         </div>
